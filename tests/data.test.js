@@ -24,6 +24,8 @@ test('constructionType', () => {
   assert.equal(constructionType('Колонна К-1'), 'Колонна');
   assert.equal(constructionType('Балка Б-1'), 'Балка');
   assert.equal(constructionType('К-10 1шт'), 'Прочее');
+  assert.equal(constructionType('Клона К-1 2шт'), 'Колонна');
+  assert.equal(constructionType('Kолона К-1'), 'Колонна'); // латинская K
 });
 
 test('parseCsv: кавычки, запятые, переводы строк', () => {

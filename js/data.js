@@ -192,7 +192,8 @@ export async function loadSheet(sheet, { current = false, force = false, onData 
     const data = { ...build(cached.csv, sheet), time: cached.time };
     memory.set(sheet, data);
     have = true;
-    onData?.({ ...data, fromCache: true, offline: false });
+    const offlineNow = typeof navigator !== 'undefined' && navigator.onLine === false;
+    onData?.({ ...data, fromCache: true, offline: offlineNow });
     if (!force && Date.now() - cached.time < ttl) return data;
   }
   try {

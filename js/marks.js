@@ -40,14 +40,17 @@ export function parseMarks(name) {
   return result;
 }
 
-const TYPE_FIX = { колона: 'Колонна', колонна: 'Колонна' };
+const TYPE_FIX = { колона: 'Колонна', колонна: 'Колонна', колон: 'Колонна', клона: 'Колонна', клонна: 'Колонна' };
 
 /** Тип конструкции — первое слово названия («Колона» → «Колонна»). */
 export function constructionType(name) {
   const first = String(name ?? '').trim().split(/\s+/)[0] || '';
   if (!first || /[\d]/.test(first) || /[-–—]/.test(first)) return 'Прочее';
+  // латинские двойники букв → кириллица (частая опечатка при наборе)
+  const LATIN = { a: 'а', c: 'с', e: 'е', k: 'к', m: 'м', o: 'о', p: 'р', t: 'т', x: 'х', y: 'у', b: 'в', h: 'н' };
   const low = first.toLowerCase().replace(/[^а-яёa-z]/gi, '');
   if (!low) return 'Прочее';
-  if (TYPE_FIX[low]) return TYPE_FIX[low];
+  const fixed = TYPE_FIX[low.replace(/[a-z]/g, (c) => LATIN[c] ?? c)];
+  if (fixed) return fixed;
   return low[0].toUpperCase() + low.slice(1);
 }
